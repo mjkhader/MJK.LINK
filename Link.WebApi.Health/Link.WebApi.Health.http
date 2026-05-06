@@ -1,0 +1,6 @@
+@Link.WebApi.Health_HostAddress = http://localhost:5242
+
+GET {{Link.WebApi.Health_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

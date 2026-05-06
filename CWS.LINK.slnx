@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Link.BusinessModel.Core/Link.BusinessModel.Core.csproj" />
+  <Project Path="Link.BusinessService.Core/Link.BusinessService.Core.csproj" />
+  <Project Path="Link.DataAccess.Core/Link.DataAccess.Core.csproj" />
+  <Project Path="Link.WebApi.Health/Link.WebApi.Health.csproj" />
+</Solution>
