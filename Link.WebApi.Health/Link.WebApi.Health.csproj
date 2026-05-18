@@ -7,11 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Link.BusinessModel.Core\Link.BusinessModel.Core.csproj" />
+    <ProjectReference Include="..\Link.BusinessService.Core\Link.BusinessService.Core.csproj" />
+    <ProjectReference Include="..\Link.DataAccess.Core\Link.DataAccess.Core.csproj" />
   </ItemGroup>
 
 </Project>
