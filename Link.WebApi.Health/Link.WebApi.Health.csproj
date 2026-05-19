@@ -18,6 +18,7 @@
     <ProjectReference Include="..\Link.BusinessModel.Core\Link.BusinessModel.Core.csproj" />
     <ProjectReference Include="..\Link.BusinessService.Core\Link.BusinessService.Core.csproj" />
     <ProjectReference Include="..\Link.DataAccess.Core\Link.DataAccess.Core.csproj" />
+    <ProjectReference Include="..\Link.Utilitty.Core\Link.Utilitty.Core.csproj" />
   </ItemGroup>
 
 </Project>

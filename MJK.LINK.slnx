@@ -2,5 +2,6 @@
   <Project Path="Link.BusinessModel.Core/Link.BusinessModel.Core.csproj" />
   <Project Path="Link.BusinessService.Core/Link.BusinessService.Core.csproj" />
   <Project Path="Link.DataAccess.Core/Link.DataAccess.Core.csproj" />
+  <Project Path="Link.Utilitty.Core/Link.Utilitty.Core.csproj" Id="2416979d-49d0-4578-b990-64dc85703599" />
   <Project Path="Link.WebApi.Health/Link.WebApi.Health.csproj" />
 </Solution>
