@@ -17,9 +17,7 @@ namespace DataAccess.DBContext
         public Driver Driver { get; set; }
 
         public DateTime? PickupTime { get; set; }
-
         public DateTime? DeliveredTime { get; set; }
-
         public string? Status { get; set; }
 
         public ICollection<DriverLocation> DriverLocations { get; set; }

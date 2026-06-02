@@ -1,4 +1,6 @@
 using DataAccess.DBContext;
+using Link.DataAccess.Core.Base;
+using Link.DataAccess.Core.UnitOfWork;
 using Link.Utilitty;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -60,6 +62,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddTransient <IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

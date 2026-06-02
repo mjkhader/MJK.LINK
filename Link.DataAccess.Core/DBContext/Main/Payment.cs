@@ -22,5 +22,7 @@ namespace DataAccess.DBContext
         public string? TransactionRef { get; set; }
 
         public DateTime? PaidAt { get; set; }
+
+
     }
 }

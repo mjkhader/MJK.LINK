@@ -28,7 +28,7 @@ namespace DataAccess.DBContext
         public DateTime CreatedAt { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; }
-        public Payment Payment { get; set; }
-        public Delivery Delivery { get; set; }
+        public ICollection<Payment> Payments { get; set; }
+        public Delivery? Delivery { get; set; }
     }
 }
