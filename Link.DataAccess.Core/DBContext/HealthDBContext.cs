@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.DBContext
+namespace Link.DataAccess.DBContext
 {
     public class HealthDbContext
          : IdentityDbContext<ApplicationUser, ApplicationRole, string>

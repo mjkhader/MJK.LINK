@@ -1,8 +1,9 @@
 ﻿using Link.DataAccess.Core.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess.DBContext;
-using Link.DataAccess.Core.UnitOfWork;
+using Link.DataAccess.UnitOfWork;
+using Link.DataAccess.Repository;
+using Link.DataAccess.DBContext;
 
 namespace Link.WebApi.Health.Controllers
 {
@@ -10,17 +11,22 @@ namespace Link.WebApi.Health.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserRepository _userRepository;
+        private readonly HealthDbContext _context;
 
-        public UsersController(IUnitOfWork unitOfWork)
+        public UsersController(IUnitOfWork unitOfWork, IUserRepository userRepository, HealthDbContext context)
         {
-            this.unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
+            _userRepository = userRepository;
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult GetUserById(int id)
         {
-            var user = unitOfWork.Users.GetById(id);
+            IUserRepository userRepository = new UserRepository(_context);
+            var user = _unitOfWork.Users.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -31,7 +37,7 @@ namespace Link.WebApi.Health.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAllUser()
         {
-            var user = unitOfWork.Users.GetAll();
+            var user = _unitOfWork.Users.GetAll();
             if (user == null)
             {
                 return NotFound();

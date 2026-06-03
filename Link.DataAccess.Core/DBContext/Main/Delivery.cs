@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.DBContext
+namespace Link.DataAccess.DBContext
 {
     [Table("Deliveries")]
     public class Delivery

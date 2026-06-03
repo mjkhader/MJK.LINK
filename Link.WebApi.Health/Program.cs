@@ -1,7 +1,7 @@
-using DataAccess.DBContext;
 using Link.DataAccess.Core.Base;
-using Link.DataAccess.Core.UnitOfWork;
 using Link.DataAccess.DBContext;
+using Link.DataAccess.Repository;
+using Link.DataAccess.UnitOfWork;
 using Link.Utilitty;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -71,6 +71,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddTransient <IUnitOfWork, UnitOfWork>();
+
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

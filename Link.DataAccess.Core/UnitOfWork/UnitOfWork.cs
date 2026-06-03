@@ -1,12 +1,12 @@
-﻿using DataAccess.DBContext;
-using Link.DataAccess.Core.Base;
+﻿using Link.DataAccess.Core.Base;
+using Link.DataAccess.DBContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Link.DataAccess.Core.UnitOfWork
+namespace Link.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

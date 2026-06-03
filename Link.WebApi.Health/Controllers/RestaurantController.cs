@@ -1,5 +1,5 @@
-﻿using DataAccess.DBContext;
-using Link.DataAccess.Core.Base;
+﻿using Link.DataAccess.Core.Base;
+using Link.DataAccess.DBContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
