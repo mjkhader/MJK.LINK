@@ -22,7 +22,7 @@ namespace Link.WebApi.Health.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetUserById")]
         public IActionResult GetUserById(int id)
         {
             IUserRepository userRepository = new UserRepository(_context);

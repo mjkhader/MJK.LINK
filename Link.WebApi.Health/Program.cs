@@ -66,6 +66,8 @@ builder.Services.AddSwaggerGen(options =>
         },
 
     });
+
+    options.CustomSchemaIds(type => type.FullName); // to avoid the problem of same name class in different namespace
 });
 
 

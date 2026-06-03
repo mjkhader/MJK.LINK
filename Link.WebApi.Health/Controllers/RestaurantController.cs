@@ -16,7 +16,7 @@ namespace Link.WebApi.Health.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("GetRestaurantById")]
         public IActionResult GetRestaurantById(int id)
         {
             var restaurant = _userRepository.GetById(id);
