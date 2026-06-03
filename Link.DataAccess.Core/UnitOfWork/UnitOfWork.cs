@@ -10,9 +10,9 @@ namespace Link.DataAccess.Core.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly HealthDBContext _context;
+        private readonly HealthDbContext _context;
 
-        public UnitOfWork(HealthDBContext context)
+        public UnitOfWork(HealthDbContext context)
         {
             _context = context;
             Users = new BaseRepository<User>(_context);

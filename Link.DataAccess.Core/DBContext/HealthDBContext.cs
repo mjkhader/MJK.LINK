@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Link.DataAccess.DBContext;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.DBContext
 {
-    public class HealthDBContext : IdentityDbContext
+    public class HealthDbContext
+         : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
-        public HealthDBContext(DbContextOptions<HealthDBContext> options)
+        public HealthDbContext(
+            DbContextOptions<HealthDbContext> options)
             : base(options)
         {
         }
@@ -13,164 +17,369 @@ namespace DataAccess.DBContext
         #region DbSets
 
         public DbSet<User> Users { get; set; }
+
         public DbSet<Nutritionist> Nutritionists { get; set; }
+
         public DbSet<PatientNutritionist> PatientNutritionists { get; set; }
+
         public DbSet<DietPlan> DietPlans { get; set; }
-        public DbSet<ConditionTable> ConditionTables { get; set; }
+
+        public DbSet<Condition> Conditions { get; set; }
+
         public DbSet<UserCondition> UserConditions { get; set; }
+
         public DbSet<Restaurant> Restaurants { get; set; }
+
         public DbSet<Meal> Meals { get; set; }
+
         public DbSet<Tag> Tags { get; set; }
+
         public DbSet<MealTag> MealTags { get; set; }
-        public DbSet<OrderTable> OrderTables { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
         public DbSet<OrderItem> OrderItems { get; set; }
+
         public DbSet<Subscription> Subscriptions { get; set; }
+
         public DbSet<SubscriptionDay> SubscriptionDays { get; set; }
+
         public DbSet<SubscriptionDayMeal> SubscriptionDayMeals { get; set; }
+
         public DbSet<Driver> Drivers { get; set; }
+
         public DbSet<Delivery> Deliveries { get; set; }
+
         public DbSet<DriverLocation> DriverLocations { get; set; }
+
         public DbSet<DoctorRestaurantDiscount> DoctorRestaurantDiscounts { get; set; }
+
         public DbSet<Payment> Payments { get; set; }
 
         #endregion
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            // Composite Keys
-            modelBuilder.Entity<UserCondition>()
-                .HasKey(x => new { x.UserId, x.ConditionId });
+            //----------------------------------------------------
+            // Identity Tables
+            //----------------------------------------------------
 
-            modelBuilder.Entity<MealTag>()
-                .HasKey(x => new { x.MealId, x.TagId });
+            builder.Entity<ApplicationUser>()
+                .ToTable("AspNetUsers");
 
-            // Table Names
-            modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<Nutritionist>().ToTable("nutritionists");
-            modelBuilder.Entity<PatientNutritionist>().ToTable("parientNutritionist");
-            modelBuilder.Entity<DietPlan>().ToTable("dietPlan");
-            modelBuilder.Entity<ConditionTable>().ToTable("ConditionTable");
-            modelBuilder.Entity<UserCondition>().ToTable("UserCondition");
-            modelBuilder.Entity<Restaurant>().ToTable("restaurants");
-            modelBuilder.Entity<Meal>().ToTable("Meal");
-            modelBuilder.Entity<Tag>().ToTable("tag");
-            modelBuilder.Entity<MealTag>().ToTable("mealTag");
-            modelBuilder.Entity<OrderTable>().ToTable("orderTable");
-            modelBuilder.Entity<OrderItem>().ToTable("orderItem");
-            modelBuilder.Entity<Subscription>().ToTable("subscriptions");
-            modelBuilder.Entity<SubscriptionDay>().ToTable("SubscriptionDay");
-            modelBuilder.Entity<SubscriptionDayMeal>().ToTable("SubscriptionDayMeal");
-            modelBuilder.Entity<Driver>().ToTable("Drivers");
-            modelBuilder.Entity<Delivery>().ToTable("deliverys");
-            modelBuilder.Entity<DriverLocation>().ToTable("driverLocation");
-            modelBuilder.Entity<DoctorRestaurantDiscount>().ToTable("DoctorRestaurantDiscount");
-            modelBuilder.Entity<Payment>().ToTable("Payment");
+            builder.Entity<ApplicationRole>()
+                .ToTable("AspNetRoles");
 
-            // Optional: Unique indexes matching database constraints
-            modelBuilder.Entity<User>()
-                .HasIndex(x => x.UserName)
-                .IsUnique();
+            builder.Entity<IdentityUserRole<string>>()
+                .ToTable("AspNetUserRoles");
 
-            modelBuilder.Entity<Nutritionist>()
-                .HasIndex(x => x.UserName)
-                .IsUnique();
+            builder.Entity<IdentityUserClaim<string>>()
+                .ToTable("AspNetUserClaims");
 
-            modelBuilder.Entity<Restaurant>()
-                .HasIndex(x => x.UserName)
-                .IsUnique();
+            builder.Entity<IdentityUserLogin<string>>()
+                .ToTable("AspNetUserLogins");
 
-            modelBuilder.Entity<Driver>()
-                .HasIndex(x => x.UserName)
-                .IsUnique();
+            builder.Entity<IdentityRoleClaim<string>>()
+                .ToTable("AspNetRoleClaims");
 
-            // Optional filtered unique email index for Drivers
-            modelBuilder.Entity<Driver>()
-                .HasIndex(x => x.Email)
-                .IsUnique()
-                .HasFilter("[Email] IS NOT NULL");
+            builder.Entity<IdentityUserToken<string>>()
+                .ToTable("AspNetUserTokens");
 
-            modelBuilder.Entity<Delivery>()
-                 .HasOne(d => d.OrderTable)
-                 .WithOne(o => o.Delivery)
-                 .HasForeignKey<Delivery>(d => d.OrderId);
+            //----------------------------------------------------
+            // Users
+            //----------------------------------------------------
 
-
-            modelBuilder.Entity<Delivery>()
-                  .HasOne(d => d.Driver)
-                  .WithMany(dr => dr.Deliveries)
-                  .HasForeignKey(d => d.DriverId);
-
-            modelBuilder.Entity<DriverLocation>()
-                .HasOne(dl => dl.Delivery)
-                .WithMany(d => d.DriverLocations)
-                .HasForeignKey(dl => dl.DeliveryId);
-
-            modelBuilder.Entity<Payment>()
-                .HasOne(p => p.OrderTable)
-                .WithMany(o => o.Payments)
-                .HasForeignKey(p => p.OrderId);
-
-            modelBuilder.Entity<User>(entity =>
+            builder.Entity<User>(entity =>
             {
-                entity.ToTable("users");
+                entity.ToTable("Users");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-                entity.Property(e => e.UserName).HasColumnName("user_name");
-                entity.Property(e => e.FirstName).HasColumnName("first_name");
-                entity.Property(e => e.MidName).HasColumnName("mid_name");
-                entity.Property(e => e.LastName).HasColumnName("last_name");
-                entity.Property(e => e.Phone).HasColumnName("phone");
-                entity.Property(e => e.Email).HasColumnName("email");
-                entity.Property(e => e.PasswordHash).HasColumnName("passwordHash");
-                entity.Property(e => e.Height).HasColumnName("height");
-                entity.Property(e => e.Weight).HasColumnName("weight");
-                entity.Property(e => e.Goal).HasColumnName("goal");
-                entity.Property(e => e.CreateAt).HasColumnName("create_at");
+                entity.HasKey(x => x.Id);
+
+                entity.HasIndex(x => x.AspNetUserId)
+                      .IsUnique();
+
+                entity.HasIndex(x => x.UserName)
+                      .IsUnique();
+
+                entity.Property(x => x.FirstName)
+                      .HasColumnName("first_name")
+                      .HasMaxLength(50);
+
+                entity.Property(x => x.MidName)
+                      .HasColumnName("mid_name")
+                      .HasMaxLength(50);
+
+                entity.Property(x => x.LastName)
+                      .HasColumnName("last_name")
+                      .HasMaxLength(50);
+
+                entity.Property(x => x.Height)
+                      .HasColumnName("height")
+                      .HasPrecision(5, 2);
+
+                entity.Property(x => x.Weight)
+                      .HasColumnName("weight")
+                      .HasPrecision(5, 2);
+
+                entity.Property(x => x.Goal)
+                      .HasColumnName("goal")
+                      .HasMaxLength(100);
+
+                entity.Property(x => x.CreateAt)
+                      .HasColumnName("create_at");
+
+                entity.Property(x => x.UserName)
+                      .HasMaxLength(50)
+                      .IsRequired();
+
+                entity.Property(x => x.Phone)
+                      .HasMaxLength(50)
+                      .IsRequired();
+
+                entity.Property(x => x.Email)
+                      .HasMaxLength(50)
+                      .IsRequired();
+
+                entity.HasOne<ApplicationUser>()
+                      .WithOne()
+                      .HasForeignKey<User>(x => x.AspNetUserId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<Nutritionist>(entity =>
-            {
-                entity.ToTable("nutritionists");
+            //----------------------------------------------------
+            // Nutritionists
+            //----------------------------------------------------
 
-                entity.Property(e => e.UserName).HasColumnName("user_name");
-                entity.Property(e => e.FirstName).HasColumnName("first_name");
-                entity.Property(e => e.MidName).HasColumnName("mid_name");
-                entity.Property(e => e.LastName).HasColumnName("last_name");
-                entity.Property(e => e.CreateAt).HasColumnName("create_at");
+            builder.Entity<Nutritionist>(entity =>
+            {
+                entity.ToTable("Nutritionists");
+
+                entity.HasIndex(x => x.AspNetUserId).IsUnique();
+                entity.HasIndex(x => x.UserName).IsUnique();
+                entity.HasIndex(x => x.Email).IsUnique();
+
+                entity.Property(x => x.Rating)
+                    .HasPrecision(3, 2);
+
+                entity.HasOne<ApplicationUser>()
+                    .WithOne()
+                    .HasForeignKey<Nutritionist>(x => x.AspNetUserId);
             });
 
-            modelBuilder.Entity<Restaurant>(entity =>
+            //----------------------------------------------------
+            // PatientNutritionist
+            //----------------------------------------------------
+
+            builder.Entity<PatientNutritionist>(entity =>
             {
-                entity.ToTable("restaurants");
+                entity.ToTable("PatientNutritionist");
 
-                entity.Property(e => e.Id)
-                      .HasColumnName("id");
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.PatientNutritionists)
+                    .HasForeignKey(x => x.UserId);
 
-                entity.Property(e => e.Name)
-                      .HasColumnName("name");
-
-                entity.Property(e => e.UserName)
-                      .HasColumnName("user_name");
-
-                entity.Property(e => e.Phone)
-                      .HasColumnName("phone");
-
-                entity.Property(e => e.AddressText)
-                      .HasColumnName("address_text");
-
-                entity.Property(e => e.Lat)
-                      .HasColumnName("lat");
-
-                entity.Property(e => e.Lng)
-                      .HasColumnName("lng");
-
-                entity.Property(e => e.IsActive)
-                      .HasColumnName("IsActive");
+                entity.HasOne(x => x.Nutritionist)
+                    .WithMany(x => x.PatientNutritionists)
+                    .HasForeignKey(x => x.NutritionistId);
             });
 
+            //----------------------------------------------------
+            // DietPlan
+            //----------------------------------------------------
 
+            builder.Entity<DietPlan>(entity =>
+            {
+                entity.ToTable("DietPlan");
+
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.DietPlans)
+                    .HasForeignKey(x => x.UserId);
+
+                entity.HasOne(x => x.Nutritionist)
+                    .WithMany(x => x.DietPlans)
+                    .HasForeignKey(x => x.NutritionistId);
+            });
+
+            //----------------------------------------------------
+            // Conditions
+            //----------------------------------------------------
+
+            builder.Entity<Condition>()
+                .ToTable("Conditions")
+                .HasKey(x => x.ConditionId);
+
+            builder.Entity<UserCondition>(entity =>
+            {
+                entity.ToTable("UserCondition");
+
+                entity.HasKey(x => new
+                {
+                    x.UserId,
+                    x.ConditionId
+                });
+
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.UserConditions)
+                    .HasForeignKey(x => x.UserId);
+
+                entity.HasOne(x => x.Condition)
+                    .WithMany(x => x.UserConditions)
+                    .HasForeignKey(x => x.ConditionId);
+            });
+
+            //----------------------------------------------------
+            // Restaurants
+            //----------------------------------------------------
+
+            builder.Entity<Restaurant>(entity =>
+            {
+                entity.ToTable("Restaurants");
+
+                entity.HasIndex(x => x.AspNetUserId)
+                    .IsUnique();
+
+                entity.HasIndex(x => x.UserName)
+                    .IsUnique();
+
+                entity.HasOne<ApplicationUser>()
+                    .WithOne()
+                    .HasForeignKey<Restaurant>(x => x.AspNetUserId);
+            });
+
+            //----------------------------------------------------
+            // Meals
+            //----------------------------------------------------
+
+            builder.Entity<Meal>(entity =>
+            {
+                entity.ToTable("Meal");
+
+                entity.HasOne(x => x.Restaurant)
+                    .WithMany(x => x.Meals)
+                    .HasForeignKey(x => x.RestaurantId);
+            });
+
+            //----------------------------------------------------
+            // Tags
+            //----------------------------------------------------
+
+            builder.Entity<Tag>()
+                .ToTable("Tag");
+
+            builder.Entity<MealTag>(entity =>
+            {
+                entity.ToTable("MealTag");
+
+                entity.HasKey(x => new
+                {
+                    x.MealId,
+                    x.TagId
+                });
+
+                entity.HasOne(x => x.Meal)
+                    .WithMany(x => x.MealTags)
+                    .HasForeignKey(x => x.MealId);
+
+                entity.HasOne(x => x.Tag)
+                    .WithMany(x => x.MealTags)
+                    .HasForeignKey(x => x.TagId);
+            });
+
+            //----------------------------------------------------
+            // Orders
+            //----------------------------------------------------
+
+            builder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Orders");
+
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.UserId);
+
+                entity.HasOne(x => x.Restaurant)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.RestaurantId);
+            });
+
+            builder.Entity<OrderItem>(entity =>
+            {
+                entity.ToTable("orderItem");
+
+                entity.HasOne(x => x.Order)
+                    .WithMany(x => x.OrderItems)
+                    .HasForeignKey(x => x.OrderId);
+
+                entity.HasOne(x => x.Meal)
+                    .WithMany(x => x.OrderItems)
+                    .HasForeignKey(x => x.MealId);
+            });
+
+            //----------------------------------------------------
+            // Subscriptions
+            //----------------------------------------------------
+
+            builder.Entity<Subscription>()
+                .ToTable("Subscriptions");
+
+            builder.Entity<SubscriptionDay>()
+                .ToTable("SubscriptionDay");
+
+            builder.Entity<SubscriptionDayMeal>()
+                .ToTable("SubscriptionDayMeal");
+
+            //----------------------------------------------------
+            // Drivers
+            //----------------------------------------------------
+
+            builder.Entity<Driver>(entity =>
+            {
+                entity.ToTable("Drivers");
+
+                entity.HasIndex(x => x.AspNetUserId)
+                    .IsUnique();
+
+                entity.HasIndex(x => x.UserName)
+                    .IsUnique();
+
+                entity.HasIndex(x => x.Email)
+                    .IsUnique();
+
+                entity.HasOne<ApplicationUser>()
+                    .WithOne()
+                    .HasForeignKey<Driver>(x => x.AspNetUserId);
+            });
+
+            //----------------------------------------------------
+            // Deliveries
+            //----------------------------------------------------
+
+            builder.Entity<Delivery>(entity =>
+            {
+                entity.ToTable("Deliveries");
+
+                entity.HasIndex(x => x.OrderId)
+                    .IsUnique();
+            });
+
+            builder.Entity<DriverLocation>()
+                .ToTable("driverLocation");
+
+            //----------------------------------------------------
+            // DoctorRestaurantDiscount
+            //----------------------------------------------------
+
+            builder.Entity<DoctorRestaurantDiscount>()
+                .ToTable("DoctorRestaurantDiscount");
+
+            //----------------------------------------------------
+            // Payment
+            //----------------------------------------------------
+
+            builder.Entity<Payment>()
+                .ToTable("Payment");
         }
     }
 }

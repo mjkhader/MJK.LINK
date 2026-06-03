@@ -1,15 +1,19 @@
 ﻿using DataAccess.DBContext;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.DBContext
 {
+    [Table("Restaurants")]
+
     public class Restaurant
     {
         public int Id { get; set; }
+        public string AspNetUserId { get; set; } = null!;
 
         public string Name { get; set; }
 
@@ -19,14 +23,14 @@ namespace DataAccess.DBContext
 
         public string? AddressText { get; set; }
 
-        public decimal? Lat { get; set; }
+        public decimal? latitude { get; set; }
 
-        public decimal? Lng { get; set; }
+        public decimal? longitude { get; set; }
 
         public bool IsActive { get; set; }
 
         public ICollection<Meal> Meals { get; set; }
-        public ICollection<OrderTable> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
         public ICollection<DoctorRestaurantDiscount> DoctorRestaurantDiscounts { get; set; }
     }

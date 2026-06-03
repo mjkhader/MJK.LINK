@@ -9,9 +9,9 @@ namespace Link.DataAccess.Core.Base
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        protected HealthDBContext _context;
+        protected HealthDbContext _context;
 
-        public BaseRepository(HealthDBContext context)
+        public BaseRepository(HealthDbContext context)
         {
             _context = context;
         }

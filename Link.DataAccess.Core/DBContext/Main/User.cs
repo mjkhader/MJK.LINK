@@ -12,6 +12,8 @@ namespace DataAccess.DBContext
     {
         public int Id { get; set; }
 
+        public string AspNetUserId { get; set; } = null!;
+
         [Required]
         [MaxLength(50)]
         public string UserName { get; set; }
@@ -33,8 +35,6 @@ namespace DataAccess.DBContext
         [MaxLength(100)]
         public string? Email { get; set; }
 
-        [Required]
-        public string PasswordHash { get; set; }
 
         public decimal? Height { get; set; }
 
@@ -47,7 +47,7 @@ namespace DataAccess.DBContext
         public ICollection<PatientNutritionist> PatientNutritionists { get; set; }
         public ICollection<DietPlan> DietPlans { get; set; }
         public ICollection<UserCondition> UserConditions { get; set; }
-        public ICollection<OrderTable> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
     }
 }

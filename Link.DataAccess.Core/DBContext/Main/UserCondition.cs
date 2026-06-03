@@ -13,6 +13,6 @@ namespace DataAccess.DBContext
         public User User { get; set; }
 
         public int ConditionId { get; set; }
-        public ConditionTable ConditionTable { get; set; }
+        public Condition Condition { get; set; }
     }
 }

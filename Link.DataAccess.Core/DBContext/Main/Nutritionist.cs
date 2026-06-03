@@ -2,15 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.DBContext
 {
+    [Table("Nutritionists")]
     public class Nutritionist
     {
         public int Id { get; set; }
+        public string AspNetUserId { get; set; } = null!;
 
         [Required]
         [MaxLength(50)]
@@ -30,9 +33,6 @@ namespace DataAccess.DBContext
         public string? Phone { get; set; }
 
         public string? Email { get; set; }
-
-        [Required]
-        public string PasswordHash { get; set; }
 
         public decimal? Rating { get; set; }
 

@@ -24,7 +24,7 @@ Console.WriteLine("===== DB CONNECTION STRING =====");
 Console.WriteLine(cs);
 Console.WriteLine("================================");
 
-builder.Services.AddDbContext<HealthDBContext>(options =>
+builder.Services.AddDbContext<HealthDbContext>(options =>
 {
     options.UseSqlServer(Constants.ConnectionString);
 });

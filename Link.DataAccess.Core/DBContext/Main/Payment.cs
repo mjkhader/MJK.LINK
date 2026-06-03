@@ -11,7 +11,7 @@ namespace DataAccess.DBContext
         public int Id { get; set; }
 
         public int OrderId { get; set; }
-        public OrderTable OrderTable { get; set; }
+        public Order OrderTable { get; set; }
 
         public string? Method { get; set; }
 

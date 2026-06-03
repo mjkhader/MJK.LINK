@@ -9,6 +9,7 @@ namespace DataAccess.DBContext
     public class Driver
     {
         public int Id { get; set; }
+        public string AspNetUserId { get; set; } = null!;
 
         public string UserName { get; set; }
 
