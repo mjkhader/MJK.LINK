@@ -1,7 +1,9 @@
 using DataAccess.DBContext;
 using Link.DataAccess.Core.Base;
 using Link.DataAccess.Core.UnitOfWork;
+using Link.DataAccess.DBContext;
 using Link.Utilitty;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
@@ -28,6 +30,10 @@ builder.Services.AddDbContext<HealthDbContext>(options =>
 {
     options.UseSqlServer(Constants.ConnectionString);
 });
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+    .AddEntityFrameworkStores<HealthDbContext>()
+    .AddDefaultTokenProviders();
 
 
 #endregion
