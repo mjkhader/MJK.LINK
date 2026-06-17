@@ -16,9 +16,9 @@ namespace Link.WebApi.Health.Controllers
         }
 
         [HttpGet("GetMealTagById")]
-        public IActionResult GetMealTagById(int id)
+        public IActionResult GetMealTagById(int mealId, int tagId)
         {
-            var mealTag = _context.MealTags.Find(id);
+            var mealTag = _context.MealTags.Find(mealId, tagId);
             if (mealTag == null)
             {
                 return NotFound();

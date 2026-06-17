@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Link.DataAccess.DBContext
 {
-    [Table("Restaurants")]
 
     public class Restaurant
     {
@@ -22,9 +21,9 @@ namespace Link.DataAccess.DBContext
 
         public string? AddressText { get; set; }
 
-        public decimal? latitude { get; set; }
+        public decimal? Latitude { get; set; }
 
-        public decimal? longitude { get; set; }
+        public decimal? Longitude { get; set; }
 
         public bool IsActive { get; set; }
 

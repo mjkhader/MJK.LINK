@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Link.DataAccess.DBContext
 {
-    [Table("Deliveries")]
     public class Delivery
     {
         public int Id { get; set; }

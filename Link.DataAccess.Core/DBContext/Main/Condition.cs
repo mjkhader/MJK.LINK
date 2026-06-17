@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Link.DataAccess.DBContext
 {
-    [Table("Conditions")]
     public class Condition
     {
         [Key]

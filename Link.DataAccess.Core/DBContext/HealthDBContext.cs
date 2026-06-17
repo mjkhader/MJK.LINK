@@ -93,7 +93,7 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<User>(entity =>
             {
-                entity.ToTable("Users");
+                entity.ToTable("User");
 
                 entity.HasKey(x => x.Id);
 
@@ -102,33 +102,6 @@ namespace Link.DataAccess.DBContext
 
                 entity.HasIndex(x => x.UserName)
                       .IsUnique();
-
-                entity.Property(x => x.FirstName)
-                      .HasColumnName("first_name")
-                      .HasMaxLength(50);
-
-                entity.Property(x => x.MidName)
-                      .HasColumnName("mid_name")
-                      .HasMaxLength(50);
-
-                entity.Property(x => x.LastName)
-                      .HasColumnName("last_name")
-                      .HasMaxLength(50);
-
-                entity.Property(x => x.Height)
-                      .HasColumnName("height")
-                      .HasPrecision(5, 2);
-
-                entity.Property(x => x.Weight)
-                      .HasColumnName("weight")
-                      .HasPrecision(5, 2);
-
-                entity.Property(x => x.Goal)
-                      .HasColumnName("goal")
-                      .HasMaxLength(100);
-
-                entity.Property(x => x.CreateAt)
-                      .HasColumnName("create_at");
 
                 entity.Property(x => x.UserName)
                       .HasMaxLength(50)
@@ -154,7 +127,7 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<Nutritionist>(entity =>
             {
-                entity.ToTable("Nutritionists");
+                entity.ToTable("Nutritionist");
 
                 entity.HasIndex(x => x.AspNetUserId).IsUnique();
                 entity.HasIndex(x => x.UserName).IsUnique();
@@ -207,7 +180,7 @@ namespace Link.DataAccess.DBContext
             //----------------------------------------------------
 
             builder.Entity<Condition>()
-                .ToTable("Conditions")
+                .ToTable("Condition")
                 .HasKey(x => x.ConditionId);
 
             builder.Entity<UserCondition>(entity =>
@@ -235,7 +208,7 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<Restaurant>(entity =>
             {
-                entity.ToTable("Restaurants");
+                entity.ToTable("Restaurant");
 
                 entity.HasIndex(x => x.AspNetUserId)
                     .IsUnique();
@@ -293,7 +266,7 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<Order>(entity =>
             {
-                entity.ToTable("Orders");
+                entity.ToTable("Order");
 
                 entity.HasOne(x => x.User)
                     .WithMany(x => x.Orders)
@@ -322,13 +295,29 @@ namespace Link.DataAccess.DBContext
             //----------------------------------------------------
 
             builder.Entity<Subscription>()
-                .ToTable("Subscriptions");
+                .ToTable("Subscription");
 
             builder.Entity<SubscriptionDay>()
                 .ToTable("SubscriptionDay");
 
-            builder.Entity<SubscriptionDayMeal>()
-                .ToTable("SubscriptionDayMeal");
+            builder.Entity<SubscriptionDayMeal>(entity =>
+            {
+                entity.ToTable("SubscriptionDayMeal");
+
+                entity.HasKey(x => x.Id);
+
+                entity.HasOne(x => x.SubscriptionDay)
+                    .WithMany(x => x.SubscriptionDayMeals)
+                    .HasForeignKey(x => x.SubDayId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_SubscriptionDayMeal_SubscriptionDay");
+
+                entity.HasOne(x => x.Meal)
+                    .WithMany(x => x.SubscriptionDayMeals)
+                    .HasForeignKey(x => x.MealId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_SubscriptionDayMeal_Meal");
+            });
 
             //----------------------------------------------------
             // Drivers
@@ -336,7 +325,7 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<Driver>(entity =>
             {
-                entity.ToTable("Drivers");
+                entity.ToTable("Driver");
 
                 entity.HasIndex(x => x.AspNetUserId)
                     .IsUnique();
@@ -350,6 +339,9 @@ namespace Link.DataAccess.DBContext
                 entity.HasOne<ApplicationUser>()
                     .WithOne()
                     .HasForeignKey<Driver>(x => x.AspNetUserId);
+
+      
+                
             });
 
             //----------------------------------------------------
@@ -358,14 +350,18 @@ namespace Link.DataAccess.DBContext
 
             builder.Entity<Delivery>(entity =>
             {
-                entity.ToTable("Deliveries");
+                entity.ToTable("Delivery");
 
                 entity.HasIndex(x => x.OrderId)
                     .IsUnique();
+
             });
 
-            builder.Entity<DriverLocation>()
-                .ToTable("driverLocation");
+            builder.Entity<DriverLocation>(entity => 
+            {
+                entity.ToTable("DriverLocation");
+                
+            });
 
             //----------------------------------------------------
             // DoctorRestaurantDiscount

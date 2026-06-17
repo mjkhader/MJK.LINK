@@ -8,25 +8,20 @@ using System.Threading.Tasks;
 
 namespace Link.DataAccess.DBContext
 {
-    [Table("Nutritionists")]
     public class Nutritionist
     {
         public int Id { get; set; }
         public string AspNetUserId { get; set; } = null!;
 
-        [Required]
-        [MaxLength(50)]
+        
         public string UserName { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        
         public string FirstName { get; set; }
 
-        [MaxLength(50)]
         public string? MidName { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        
         public string LastName { get; set; }
 
         public string? Phone { get; set; }
