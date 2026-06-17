@@ -62,6 +62,12 @@ namespace Link.DataAccess.DBContext
         {
             base.OnModelCreating(builder);
 
+            // Configure default delete behavior to prevent cascade cycles
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.NoAction;
+            }
+
             //----------------------------------------------------
             // Identity Tables
             //----------------------------------------------------
@@ -309,13 +315,11 @@ namespace Link.DataAccess.DBContext
                 entity.HasOne(x => x.SubscriptionDay)
                     .WithMany(x => x.SubscriptionDayMeals)
                     .HasForeignKey(x => x.SubDayId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_SubscriptionDayMeal_SubscriptionDay");
 
                 entity.HasOne(x => x.Meal)
                     .WithMany(x => x.SubscriptionDayMeals)
                     .HasForeignKey(x => x.MealId)
-                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_SubscriptionDayMeal_Meal");
             });
 
@@ -367,8 +371,20 @@ namespace Link.DataAccess.DBContext
             // DoctorRestaurantDiscount
             //----------------------------------------------------
 
-            builder.Entity<DoctorRestaurantDiscount>()
-                .ToTable("DoctorRestaurantDiscount");
+            builder.Entity<DoctorRestaurantDiscount>(entity =>
+            {
+                entity.ToTable("DoctorRestaurantDiscount");
+
+                entity.HasOne(x => x.Nutritionist)
+                    .WithMany()
+                    .HasForeignKey(x => x.NutritionistId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.Restaurant)
+                    .WithMany()
+                    .HasForeignKey(x => x.RestaurantId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
             //----------------------------------------------------
             // Payment
